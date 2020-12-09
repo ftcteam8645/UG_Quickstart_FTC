@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.HardwareMap;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -60,6 +61,7 @@ public class HardwareMap_MechanumExample
   public DcMotor  rightFront  = null;
   public DcMotor  leftBack   = null;
   public DcMotor  rightBack  = null;
+  public DcMotorEx shooter = null;
   /////////////////////////////////////
 
     /* local OpMode members. */
@@ -90,6 +92,7 @@ public class HardwareMap_MechanumExample
         leftBack = hwMap.get(DcMotor.class, "leftBack");
         rightBack = hwMap.get(DcMotor.class, "rightBack");
 
+        shooter = hwMap.get(DcMotorEx.class, "shooter");
 
         // Set Direction/Motion for Motors
         /*
@@ -101,6 +104,8 @@ public class HardwareMap_MechanumExample
         leftBack.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightBack.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
 
+        shooter.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+
         // Set all motors to ZERO! power
         /*
             CHAWKS: Why do we set the power to zero?
@@ -109,6 +114,8 @@ public class HardwareMap_MechanumExample
         rightFront.setPower(0);
         leftBack.setPower(0);
         rightBack.setPower(0);
+
+        shooter.setPower(0);
 
         // Set all motors to run without encoders.
         /*
@@ -119,6 +126,8 @@ public class HardwareMap_MechanumExample
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -130,6 +139,7 @@ public class HardwareMap_MechanumExample
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
  }
 
