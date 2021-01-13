@@ -31,7 +31,6 @@ package org.firstinspires.ftc.teamcode.HardwareMap;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -53,23 +52,32 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Motor channel:  Left Back (LB) drive motor:        "leftBack"
  * Motor channel:  Right Back (RB) drive motor:        "rightBack"
  */
-public class HardwareMap_MechanumExample
+public class HardwareMap_BrainBotz
 {
+
     /* Public OpMode members. */
     // CHAWKS: The Robot Parts need to be established here
-  public DcMotor  leftFront   = null;
+  public DcMotor  leftFront   =null;
   public DcMotor  rightFront  = null;
   public DcMotor  leftBack   = null;
   public DcMotor  rightBack  = null;
   public DcMotorEx shooter = null;
+  public DcMotor  intake=null;
+
+
+   //Servo input here//
+   public Servo  wobble= null;
+   public Servo  trigger=null;
+   public Servo  target =null;
+   public Servo  grabber =null;
   /////////////////////////////////////
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
-    private ElapsedTime period  = new ElapsedTime();
+    private final ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
-    public HardwareMap_MechanumExample(){
+    public HardwareMap_BrainBotz(){
 
     }
 
@@ -91,8 +99,16 @@ public class HardwareMap_MechanumExample
         rightFront  = hwMap.get(DcMotor.class, "rightFront");
         leftBack = hwMap.get(DcMotor.class, "leftBack");
         rightBack = hwMap.get(DcMotor.class, "rightBack");
-
         shooter = hwMap.get(DcMotorEx.class, "shooter");
+        intake = hwMap.get(DcMotor.class,  "intake");
+
+        // Define and Initialize Servos
+        wobble = hwMap.get(Servo.class, "wobble");
+        trigger = hwMap.get(Servo.class,"trigger");
+        target = hwMap.get(Servo.class,"target");
+        grabber = hwMap.get(Servo.class,"grabber");
+
+
 
         // Set Direction/Motion for Motors
         /*
@@ -103,8 +119,14 @@ public class HardwareMap_MechanumExample
         rightFront.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         leftBack.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightBack.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
-
         shooter.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        intake.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        wobble.setDirection(Servo.Direction.FORWARD);
+        trigger.setDirection(Servo.Direction.FORWARD);
+        target.setDirection(Servo.Direction.FORWARD);
+        grabber.setDirection(Servo.Direction.FORWARD);
+
+
 
         // Set all motors to ZERO! power
         /*
@@ -114,8 +136,12 @@ public class HardwareMap_MechanumExample
         rightFront.setPower(0);
         leftBack.setPower(0);
         rightBack.setPower(0);
-
         shooter.setPower(0);
+        intake.setPower(0);
+
+        // servo set Position 0.5 stops continuous rotation servo -grabber and wobble dont add
+        trigger.setPosition(0.5);
+        target.setPosition(.5);
 
         // Set all motors to run without encoders.
         /*
@@ -126,20 +152,22 @@ public class HardwareMap_MechanumExample
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //shooter.setmode(DcMoter.RunMode.RUN_USING_ENCODER);
 
         // Set zero power condition
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
  }
 

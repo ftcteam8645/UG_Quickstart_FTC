@@ -29,26 +29,25 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 //import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 // List where other files are located that are used in this OpMode
-import org.firstinspires.ftc.teamcode.HardwareMap.HardwareMap_MechanumExample;
+import org.firstinspires.ftc.teamcode.HardwareMap.HardwareMap_BrainBotz;
 
 /**
  * This OpMode uses the HardwareMap_Example class to define the devices on the robot.
  */
 // CHAWKS: Name it something useful!
-@TeleOp(name="TeleOp POV Mech", group="TeleOp")
+@TeleOp(name="TeleOp POV BrainBotz", group="TeleOp")
 // CHAWKS: What does @Disabled mean? what happens if we remove it?
-@Disabled
-public class TeleOp_PovDrive_MechanumExample extends LinearOpMode {
+//@Disabled
+public class TeleOp_PovDrive_BrainBotz extends LinearOpMode {
 
     /* CHAWKS: Call and declare the robot here */
-    HardwareMap_MechanumExample robot   = new HardwareMap_MechanumExample();    // Use the Example hardware map
+    HardwareMap_BrainBotz robot   = new HardwareMap_BrainBotz();    // Use the Example hardware map
 
     // MUST HAVE
     @Override
@@ -66,6 +65,11 @@ public class TeleOp_PovDrive_MechanumExample extends LinearOpMode {
         double maxSpeed=1;
         double turnReducer = 1.0;
 
+        boolean triggerOn=false;
+        double lineAngle=0.2;
+        double wallAngle=0.5;
+
+
         /*
             CHAWKS: On Driver Station, telemetry will be display!
                     How is this useful for debugging?
@@ -79,11 +83,14 @@ public class TeleOp_PovDrive_MechanumExample extends LinearOpMode {
         */
         // MUST HAVE THIS LINE BELOW
         robot.init(hardwareMap);
+        robot.target.setPosition(wallAngle);
+        robot.wobble.setPosition(1);
+        robot.grabber.setPosition(0);
 
 
         // Send telemetry message to "Driver Station" signify robot waiting;
         telemetry.addData("Status: ", "Hit [PLAY] to start!");    //
-        telemetry.update();
+
 
         /*
             CHAWKS: Step 1. Hit Play to run through the code!
@@ -122,6 +129,8 @@ public class TeleOp_PovDrive_MechanumExample extends LinearOpMode {
                 turnReducer = 1.0;
             }
 
+
+
             // Combine drive and turn for blended motion.
             leftB  = (-strafe+drive + turn)*maxSpeed;
             rightB = (strafe+drive - turn)*maxSpeed;
@@ -140,6 +149,53 @@ public class TeleOp_PovDrive_MechanumExample extends LinearOpMode {
                 rightB /= max;
             }
 
+            //intake
+            if(gamepad1.left_trigger>0.1) {
+               robot.intake.setPower(1.0);
+            }
+            else if (gamepad1.right_trigger>0.1) {
+                robot.intake.setPower(-1.0);
+            }
+            else if((gamepad1.left_trigger<=0.1)&&(gamepad1.right_trigger<=0.1)) {
+                robot.intake.setPower(0);
+            }
+            //shooter
+            if (gamepad1.x) {
+                robot.shooter.setPower(0.75);
+            }
+                else if (!gamepad1.x){
+                    robot.shooter.setPower(0);
+            }
+                // turn on press button on and off
+            if ((gamepad1.a)&&(!triggerOn)){
+                robot.trigger.setPosition(1.0);
+                triggerOn=true;
+                sleep(150);
+            }
+              else if((gamepad1.a)&&(triggerOn)) {
+                robot.trigger.setPosition(0.5);
+                triggerOn = false;
+                sleep(150);
+            }
+            if  (gamepad1.dpad_left){
+                robot.target.setPosition(wallAngle);
+                sleep(50);
+        }
+            if (gamepad1.dpad_right) {
+                robot.target.setPosition(lineAngle);
+                sleep(50);
+            }
+            if (gamepad1.dpad_down){
+                robot.wobble.setPosition(1);
+                sleep(1000);
+                robot.grabber.setPosition(1);
+                sleep(50);
+            }
+            if (gamepad1.dpad_up){
+                robot.grabber.setPosition(0);
+                sleep(1000);
+                robot.wobble.setPosition(0.5);
+            }
             // Output the safe vales to the motor drives.
             /*
                 CHAWKS: Put in the power number!
@@ -147,16 +203,11 @@ public class TeleOp_PovDrive_MechanumExample extends LinearOpMode {
                         What would happen if you apply power to half the wheels?
              */
 
-            robot.leftFront.setPower(leftB);
-            robot.rightFront.setPower(rightB);
+            robot.leftFront.setPower(leftF);
+            robot.rightFront.setPower(rightF);
             robot.leftBack.setPower(leftB);
             robot.rightBack.setPower(rightB);
 
-            // Use gamepad left & right Bumpers to open and close the claw
-            //if (gamepad1.right_bumper)
-                //clawOffset += CLAW_SPEED;
-            //else if (gamepad1.left_bumper)
-                //clawOffset -= CLAW_SPEED;
 
             // Send telemetry message to signify robot running;
             telemetry.addData("leftFront",  "%.2f", leftF);
