@@ -41,7 +41,7 @@ import org.firstinspires.ftc.teamcode.HardwareMap.HardwareMap_BrainBotz;
  * This OpMode uses the HardwareMap_Example class to define the devices on the robot.
  */
 // CHAWKS: Name it something useful!
-@TeleOp(name="TeleOp POV BrainBotz", group="TeleOp")
+@TeleOp(name="TeleOp_BrainBotzDual", group="TeleOp")
 // CHAWKS: What does @Disabled mean? what happens if we remove it?
 //@Disabled
 public class TeleOp_BrainBotzDual extends LinearOpMode {
